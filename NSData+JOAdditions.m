@@ -13,7 +13,7 @@
 {
     const char * bytes = self.bytes;
     const char hexbase[] = "0123456789abcdef";
-    char * hexval = malloc(sizeof(char) * self.length*2+1);
+    char * hexval = malloc(sizeof(char) * self.length*2);
     NSString * t = nil;
     if (hexval)
     {
@@ -22,8 +22,9 @@
             hexval[2*i] =hexbase[bytes[i]>>4 & 0xf];
             hexval[2*i+1] = hexbase[bytes[i] & 0x0f];
         }
-        hexval[self.length*2+1]='\0';
-        t = [NSString stringWithCString:hexval encoding:NSASCIIStringEncoding];
+
+        NSData * strData = [NSData dataWithBytes: hexval length:self.length*2];
+        t = [[NSString alloc] initWithData:strData encoding:NSASCIIStringEncoding];
         free(hexval);
     }
     return t;
